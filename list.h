@@ -4,10 +4,10 @@
 
 int foo();
 
-struct nlist {
+typedef struct nlist {
     char *data;
     struct nlist *next;
-};
+} nlist;
 
 /* Frees the linked list pointed to by the head argument */
 void free_nlist(struct nlist *);

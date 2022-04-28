@@ -5,11 +5,11 @@
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
+	FILE *fp;
     /* open the makefile based on command line arguments */
-    FILE *fp = openMakefile(argc, argv);
+    fp = openMakefile(argc, argv);
 
     /* Parse the file for rules, dependancies, and actions */
-    
     
     
     
