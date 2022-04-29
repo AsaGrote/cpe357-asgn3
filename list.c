@@ -38,7 +38,7 @@ void add_node(struct nlist *head, char *data) {
 
 /* search the node list for a value
  * returns a pointer to the node  */
-struct nlist *get_node(struct nlist *head, char *data)
+struct nlist *get_node(struct nlist *head, char *data) {
 	nlist *cur = NULL;
 	cur = head;
 

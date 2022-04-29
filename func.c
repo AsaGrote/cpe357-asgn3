@@ -24,3 +24,28 @@ FILE *openMakefile(int argc, char **argv) {
     }
     return fp;
 }
+
+char *read_long_line(FILE *file) {
+    char *line = NULL;
+    char *temp = NULL;
+    int size = 0;
+    char c = 0;
+
+    while (1) {
+        c = getc(file);
+
+        temp = (char *)realloc(line, (size + 10)*sizeof(char));
+        line = temp;
+        temp = NULL;
+
+        if (feof(file) || c == '\n') {
+            line[size] = '\0';
+            return line;
+        }
+
+        line[size] = c;
+        size++;
+    }
+
+    return line;
+}

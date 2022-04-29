@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 typedef struct rule_list {
     char *target;
     struct nlist *depen;
@@ -5,3 +7,6 @@ typedef struct rule_list {
     struct rule_list *next;
     int updated;
 } rule_list;
+
+rule_list *new_rule(char *target);
+rule_list *parse_file(FILE *file);

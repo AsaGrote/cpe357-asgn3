@@ -5,3 +5,4 @@
 #include <stdio.h>
 
 FILE *openMakefile(int, char **);
+char *read_long_line(FILE *file);
