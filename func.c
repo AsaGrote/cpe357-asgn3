@@ -16,7 +16,7 @@ FILE *openMakefile(int argc, char **argv) {
         }
     }
     else {
-        fp = fopen("smakefile", "r");
+        fp = fopen("Smakefile", "r");
         if (fp == NULL) {
             perror("smakefile");
             exit(-1);

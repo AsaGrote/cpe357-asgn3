@@ -42,7 +42,7 @@ struct nlist *get_node(struct nlist *head, char *data) {
 	nlist *cur = NULL;
 	cur = head;
 
-	while (cur != NULL & cur->data != data) {
+	while (cur != NULL && cur->data != data) {
 		cur = cur->next;
 	}
 

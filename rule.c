@@ -16,10 +16,9 @@ rule_list *parse_file(FILE *file) {
 	char *line = NULL;
 	char *target = NULL;
 	char *dep = NULL;
-	
-	while (!EOF) {
-		line = read_long_line(file);
-		
+
+	line = read_long_line(file);	
+	while (!feof(file)) {
 		if (strlen(line) > 0) {
 			/* if line starts with \t, it is an action */
 			if (line[0] == '\t') {
@@ -54,13 +53,12 @@ rule_list *parse_file(FILE *file) {
 
 				while (dep != NULL) {
 					/* my way of ignoring white space */ 
-					if (!strcmp(dep, " ") && !strcmp(dep, "")) {
-						add_node(cur->depen, dep);
-					}
+					add_node(cur->depen, dep);
 					dep = strtok(line, " ");
 				}
 			}
 		}
+		line = read_long_line(file);
 	}
 
 	return head;
