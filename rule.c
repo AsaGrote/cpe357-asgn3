@@ -11,7 +11,7 @@ rule_list *new_rule(char *target) {
 	return rule;
 }
 
-rule_list *parse_file(FILE *file) {
+struct rule_list *parse_file(FILE *file) {
 	rule_list *cur = NULL, *head = NULL;
 	char *line = NULL;
 	char *target = NULL;
