@@ -2,8 +2,6 @@
 #define LIST_H
 #endif
 
-int foo();
-
 typedef struct nlist {
     char *data;
     struct nlist *next;
@@ -11,6 +9,11 @@ typedef struct nlist {
 
 /* Frees the linked list pointed to by the head argument */
 void free_nlist(struct nlist *);
+
+/* Creates a new node with the data passed in to create_node */
+/* Arguments: String that contains the data for the new node */
+/* Returns a pointer to the new node */
+struct nlist *create_node(char *);
 
 /* Adds a node to the linked list. */
 /* Accepts two arguments. The first is the head of the list. The second is the data to add */
