@@ -24,6 +24,17 @@ void print_rules(rule_list *rule) {
 	}
 }
 
+rule_list *get_rule(rule_list *head, char *target) {
+	rule_list *cur = NULL;
+	cur = head;
+
+	while (cur != NULL && cur->target != target) {
+		cur = cur->next;
+	}
+
+	return cur;
+}
+
 rule_list *parse_file(FILE *file) {
 	rule_list *cur = NULL, *head = NULL;
 	char *line = NULL;
