@@ -15,13 +15,22 @@ void free_nlist(struct nlist *head) {
     free_nlist(temp); /* recursively free list */
 }
 
+void print_nlist(nlist *list) {
+	nlist *cur = list;
+
+	while (cur != NULL) {
+		printf("%s\n", cur->data);
+		cur = cur->next;
+	}
+}
+
 /* Creates a new node with the data passed in to create_node */
 /* Arguments: String that contains the data for the new node */
 /* Returns a pointer to the new node */
 struct nlist *create_node(char *data) {
-    struct nlist * new = (struct nlist *) malloc(sizeof(struct nlist));
-    if (new == NULL) {
-        printf("Error. Out of memory\n");
+    struct nlist *new = (struct nlist *) malloc(sizeof(struct nlist));
+	if (new == NULL) {
+        perror("Error. Out of memory\n");
         exit(-1);
     }
     new->data = data;
@@ -34,17 +43,20 @@ void add_node(struct nlist *head, char *data) {
 	nlist *cur = head, *prev = NULL;
 
 	while (cur != NULL) {
+		printf("cur");
 		prev = cur;
 		cur = cur->next;
 	}
-
-	cur = create_node(data);
-
+	cur = (struct nlist *)malloc(sizeof(struct nlist));
 	if (head == NULL) {
 		head = cur;
 	} else {
 		prev->next = cur;
 	}
+	cur->data = data;
+	cur->next = NULL;
+	return;
+
 }
 
 /* search the node list for a value

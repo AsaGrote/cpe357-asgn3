@@ -7,6 +7,8 @@ typedef struct nlist {
     struct nlist *next;
 } nlist;
 
+void print_nlist(nlist *list);
+
 /* Frees the linked list pointed to by the head argument */
 void free_nlist(struct nlist *);
 

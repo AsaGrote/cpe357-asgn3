@@ -10,3 +10,4 @@ typedef struct rule_list {
 
 rule_list *new_rule(char *target);
 rule_list *parse_file(FILE *file);
+void print_rules(rule_list *rule);

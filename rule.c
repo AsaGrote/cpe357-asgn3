@@ -11,6 +11,17 @@ rule_list *new_rule(char *target) {
 	return rule;
 }
 
+void print_rules(rule_list *rule) {
+	while (rule != NULL) {
+		printf("%s\n", rule->target);
+		printf("dependencies:\n");
+		print_nlist(rule->depen);
+		printf("actions:\n");
+		print_nlist(rule->actions);
+		rule = rule->next;
+	}
+}
+
 struct rule_list *parse_file(FILE *file) {
 	rule_list *cur = NULL, *head = NULL;
 	char *line = NULL;
@@ -31,8 +42,8 @@ struct rule_list *parse_file(FILE *file) {
 				/* split line based on ':' 
 				 * target = target
 				 * line = dependencies */
-				target = strsep(&line, ":");
-
+				target = strtok(line, ":");
+				dep = strtok(NULL, ":");
 				/* if line is made NULL, ':' was not found */	
 				if (line == NULL) {
 					perror("':' not found");
@@ -49,12 +60,21 @@ struct rule_list *parse_file(FILE *file) {
 				}
 				
 				/* split dependencies & add to dependency list */
-				dep = strtok(line, " ");
-
-				while (dep != NULL) {
-					/* my way of ignoring white space */ 
-					add_node(cur->depen, dep);
+				printf("line: %s\n", line);
+				line = dep;
+				if (line != NULL) {
+					while (line[0] == ' ') {
+						line++;
+					}
+					printf("deps: %s\n", line);
 					dep = strtok(line, " ");
+					printf("ok: %s\n", dep);
+					while (dep != NULL) {
+						/* my way of ignoring white space */ 
+						printf("dep: %s\n", dep);
+						add_node(cur->depen, dep);
+						dep = strtok(NULL, " ");
+					}
 				}
 			}
 		}

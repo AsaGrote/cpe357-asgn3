@@ -34,7 +34,7 @@ char *read_long_line(FILE *file) {
     while (1) {
         c = getc(file);
 
-        temp = (char *)realloc(line, (size + 10)*sizeof(char));
+        temp = (char *)realloc(line, (size + 1)*sizeof(char));
         line = temp;
         temp = NULL;
 

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -pedantic -std=gnu99
+CFLAGS = -Wall -Werror -pedantic -ansi
 MAIN = smake
 OBJ = main.o func.o rule.o list.o
 all: $(MAIN)
