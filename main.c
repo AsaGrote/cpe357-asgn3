@@ -15,7 +15,5 @@ int main(int argc, char **argv) {
     
 	rules = parse_file(fp);	    
 	print_rules(rules);
-	printf("%s\n", rules->target);
-	printf("%s\n", rules->actions->data);
 	return 0;
 }

@@ -8,6 +8,8 @@
 rule_list *new_rule(char *target) {
 	rule_list *rule = (rule_list *)malloc(sizeof(rule_list));
 	rule->target = target;
+	rule->depen = NULL;
+	rule->actions = NULL;
 	return rule;
 }
 
@@ -22,7 +24,7 @@ void print_rules(rule_list *rule) {
 	}
 }
 
-struct rule_list *parse_file(FILE *file) {
+rule_list *parse_file(FILE *file) {
 	rule_list *cur = NULL, *head = NULL;
 	char *line = NULL;
 	char *target = NULL;
@@ -36,7 +38,7 @@ struct rule_list *parse_file(FILE *file) {
 				/* increment line to get rid of tab 
 				 * & add action to action list */
 				line++;
-				add_node(cur->actions, line);
+				cur->actions = add_node(cur->actions, line);
 			/* otherwise, line is "target : dependencies" */
 			} else {
 				/* split line based on ':' 
@@ -60,19 +62,15 @@ struct rule_list *parse_file(FILE *file) {
 				}
 				
 				/* split dependencies & add to dependency list */
-				printf("line: %s\n", line);
 				line = dep;
 				if (line != NULL) {
 					while (line[0] == ' ') {
 						line++;
 					}
-					printf("deps: %s\n", line);
 					dep = strtok(line, " ");
-					printf("ok: %s\n", dep);
 					while (dep != NULL) {
 						/* my way of ignoring white space */ 
-						printf("dep: %s\n", dep);
-						add_node(cur->depen, dep);
+						cur->depen = add_node(cur->depen, dep);
 						dep = strtok(NULL, " ");
 					}
 				}
@@ -81,5 +79,4 @@ struct rule_list *parse_file(FILE *file) {
 		line = read_long_line(file);
 	}
 
-	return head;
-}
+	return head;}

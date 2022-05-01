@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* Frees the linked list pointed to by the head argument */
-void free_nlist(struct nlist *head) {
+void free_nlist(nlist *head) {
     nlist *temp = NULL;
 
 	if (head == NULL) { /* base case */
@@ -19,7 +19,7 @@ void print_nlist(nlist *list) {
 	nlist *cur = list;
 
 	while (cur != NULL) {
-		printf("%s\n", cur->data);
+		printf("\t%s\n", cur->data);
 		cur = cur->next;
 	}
 }
@@ -27,8 +27,8 @@ void print_nlist(nlist *list) {
 /* Creates a new node with the data passed in to create_node */
 /* Arguments: String that contains the data for the new node */
 /* Returns a pointer to the new node */
-struct nlist *create_node(char *data) {
-    struct nlist *new = (struct nlist *) malloc(sizeof(struct nlist));
+nlist *create_node(char *data) {
+    nlist *new = (nlist *) malloc(sizeof(nlist));
 	if (new == NULL) {
         perror("Error. Out of memory\n");
         exit(-1);
@@ -39,15 +39,14 @@ struct nlist *create_node(char *data) {
 }
 
 /* adds a new node to the nlist */
-void add_node(struct nlist *head, char *data) {
+nlist *add_node(nlist *head, char *data) {
 	nlist *cur = head, *prev = NULL;
 
 	while (cur != NULL) {
-		printf("cur");
 		prev = cur;
 		cur = cur->next;
 	}
-	cur = (struct nlist *)malloc(sizeof(struct nlist));
+	cur = (nlist *)malloc(sizeof(nlist));
 	if (head == NULL) {
 		head = cur;
 	} else {
@@ -55,13 +54,14 @@ void add_node(struct nlist *head, char *data) {
 	}
 	cur->data = data;
 	cur->next = NULL;
-	return;
+
+	return head;
 
 }
 
 /* search the node list for a value
  * returns a pointer to the node  */
-struct nlist *get_node(struct nlist *head, char *data) {
+nlist *get_node(nlist *head, char *data) {
 	nlist *cur = NULL;
 	cur = head;
 
