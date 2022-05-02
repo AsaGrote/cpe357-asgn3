@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* Frees the linked list pointed to by the head argument */
-void free_nlist(nlist *head) {
+void free_nlist(struct nlist *head) {
     nlist *temp = NULL;
 
 	if (head == NULL) { /* base case */
@@ -15,22 +15,13 @@ void free_nlist(nlist *head) {
     free_nlist(temp); /* recursively free list */
 }
 
-void print_nlist(nlist *list) {
-	nlist *cur = list;
-
-	while (cur != NULL) {
-		printf("\t%s\n", cur->data);
-		cur = cur->next;
-	}
-}
-
 /* Creates a new node with the data passed in to create_node */
 /* Arguments: String that contains the data for the new node */
 /* Returns a pointer to the new node */
-nlist *create_node(char *data) {
-    nlist *new = (nlist *) malloc(sizeof(nlist));
-	if (new == NULL) {
-        perror("Error. Out of memory\n");
+struct nlist *create_node(char *data) {
+    struct nlist * new = (struct nlist *) malloc(sizeof(struct nlist));
+    if (new == NULL) {
+        printf("Error. Out of memory\n");
         exit(-1);
     }
     new->data = data;
@@ -39,29 +30,27 @@ nlist *create_node(char *data) {
 }
 
 /* adds a new node to the nlist */
-nlist *add_node(nlist *head, char *data) {
-	nlist *cur = head, *prev = NULL;
+void add_node(nlist **headptr, char *data) {
+	nlist *new = create_node(data); /* create new node with data passed in */
+    nlist *tail = *headptr; /* Used to traverse list */
+    
+	if (*headptr == NULL) { /* If head is null, set head to new node */
+        *headptr = new;
+        return;
+    }
+    while (tail->next != NULL) { /* Traverse list until tail is reached */
+        tail = tail->next;
+    }
+    tail->next = new; /* Set the tail's next to the new node */
 
-	while (cur != NULL) {
-		prev = cur;
-		cur = cur->next;
-	}
-	cur = (nlist *)malloc(sizeof(nlist));
-	if (head == NULL) {
-		head = cur;
-	} else {
-		prev->next = cur;
-	}
-	cur->data = data;
-	cur->next = NULL;
-
-	return head;
-
+    /* Set pointers to null */
+    tail = NULL;
+    new = NULL;
 }
 
 /* search the node list for a value
  * returns a pointer to the node  */
-nlist *get_node(nlist *head, char *data) {
+struct nlist *get_node(struct nlist *head, char *data) {
 	nlist *cur = NULL;
 	cur = head;
 
