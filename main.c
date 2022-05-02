@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
 
 	/* based on arguments provided, apply proper rule */
 	if (argc == 1) {
-	/*	apply_rule(rules); */
+		apply_rule(&rules);
 	} else if (argc == 2) {
 		arg = get_rule(rules, argv[1]);
 		if (arg == NULL) {
@@ -28,11 +28,8 @@ int main(int argc, char **argv) {
 			exit(-1);
 		}
 
-	/*	apply_rule(arg);	*/
+		apply_rule(&arg);
 	}
-
-	/* test execute_action using echo rule */
-	execute_actions(rules->next->actions);
 
 	return 0;
 }
