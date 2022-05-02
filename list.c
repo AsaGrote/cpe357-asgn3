@@ -39,24 +39,22 @@ nlist *create_node(char *data) {
 }
 
 /* adds a new node to the nlist */
-nlist *add_node(nlist *head, char *data) {
-	nlist *cur = head, *prev = NULL;
+void add_node(nlist **headptr, char *data) {
+	nlist *new = create_node(data); /* create new node with data passed in */
+    nlist *tail = *headptr; /* Used to traverse list */
+    
+	if (*headptr == NULL) { /* If head is null, set head to new node */
+        *headptr = new;
+        return;
+    }
+    while (tail->next != NULL) { /* Traverse list until tail is reached */
+        tail = tail->next;
+    }
+    tail->next = new; /* Set the tail's next to the new node */
 
-	while (cur != NULL) {
-		prev = cur;
-		cur = cur->next;
-	}
-	cur = (nlist *)malloc(sizeof(nlist));
-	if (head == NULL) {
-		head = cur;
-	} else {
-		prev->next = cur;
-	}
-	cur->data = data;
-	cur->next = NULL;
-
-	return head;
-
+    /* Set pointers to null */
+    tail = NULL;
+    new = NULL;
 }
 
 /* search the node list for a value
@@ -70,4 +68,11 @@ nlist *get_node(nlist *head, char *data) {
 	}
 
 	return cur;
+}
+
+void execute_actions(nlist *actions) {
+	while (actions != NULL) {
+		system(actions->data);
+		actions = actions->next;
+	}
 }

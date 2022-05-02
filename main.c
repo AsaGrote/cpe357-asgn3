@@ -31,5 +31,8 @@ int main(int argc, char **argv) {
 	/*	apply_rule(arg);	*/
 	}
 
+	/* test execute_action using echo rule */
+	execute_actions(rules->next->actions);
+
 	return 0;
 }

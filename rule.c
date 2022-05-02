@@ -49,7 +49,7 @@ rule_list *parse_file(FILE *file) {
 				/* increment line to get rid of tab 
 				 * & add action to action list */
 				line++;
-				cur->actions = add_node(cur->actions, line);
+				add_node(&(cur->actions), line);
 			/* otherwise, line is "target : dependencies" */
 			} else {
 				/* split line based on ':' 
@@ -81,7 +81,7 @@ rule_list *parse_file(FILE *file) {
 					dep = strtok(line, " ");
 					while (dep != NULL) {
 						/* my way of ignoring white space */ 
-						cur->depen = add_node(cur->depen, dep);
+						add_node(&(cur->depen), dep);
 						dep = strtok(NULL, " ");
 					}
 				}
@@ -90,4 +90,12 @@ rule_list *parse_file(FILE *file) {
 		line = read_long_line(file);
 	}
 
-	return head;}
+	return head;
+}
+
+
+void apply_rule(rule_list *rule) {
+	
+
+}
+
