@@ -1,5 +1,4 @@
 #include "rule.h"
-#include "func.h"
 #include "list.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,7 +37,7 @@ rule_list *get_rule(rule_list *head, char *target) {
 	rule_list *cur = NULL;
 	cur = head;
 
-	while (cur != NULL && cur->target != target) {
+	while (cur != NULL && strcmp(cur->target, target) != 0) {
 		cur = cur->next;
 	}
 
@@ -60,13 +59,11 @@ rule_list *parse_file(FILE *file) {
 	}
 
 	while (getline(&lineptr, &line_size, file) != -1) { /* While end of file has not been reached */ 
-		printf("Line: %s\n", lineptr);
 		if (lineptr[0] == '\t') { /* Action line */
 			if (cur == NULL) { /* If no rules have been declared, throw error */
 				printf("Error. No rule declared before actions.");
 				exit(-1);
 			}
-			printf("Action: %s\n", lineptr);
 			add_node(&(cur->actions), strdup(lineptr)); /* Otherwise, add action to current rule_list action list */
 		}
 		else { /* Rule & dependency line */
@@ -78,13 +75,10 @@ rule_list *parse_file(FILE *file) {
 			if (token == NULL) {
 				continue;
 			}
-			printf("Target: %s\n", token);
 
 			/* First token is the rule */
 			if (head == NULL) { /* If first rule, head = new rule with the current target name */
-				printf("HERE WE ARE SETTING HEAD TO %s", token);
 				head = new_rule(strdup(token)); 
-				printf("Head target : %s", head->target);
 				cur = head;
 			}
 			else { /* Else if not first rule, create new rule, set current->next to the new rule, then set current to the new rule */
@@ -109,12 +103,14 @@ rule_list *parse_file(FILE *file) {
 void apply_rule(rule_list **rule) {
 	struct stat dep_stat; /* holds the struct stat for the dependency */
 	struct stat target_stat; /* holds the struct stat for the target */
+	int target_file_exists = stat((*rule)->target, &target_stat);
+
 	if (*rule == NULL) {
 		/* TODO: THIS IS AN ERROR RIGHT? */
 		printf("Error. No rule to apply.");
 		exit(-1);
 	}
-	if ((*rule)->depen == NULL) { /* if no dependencies */
+	if ((*rule)->depen == NULL && (*rule)->actions != NULL ) { /* if no dependencies */
 		/* execute the rule's actions, set the rule to updated, then return */
 		execute_actions((*rule)->actions);
 		(*rule)->updated = 1;
@@ -182,7 +178,7 @@ void apply_rule(rule_list **rule) {
 			execute_actions((*rule)->actions);
 		}
 		/* else if a file with a name matching the target does not exist */
-		else if (stat((*rule)->target, &target_stat) == -1) {
+		else if (target_file_exists == -1) {
 			/* execute the rule's actions, set the rule to updated, then return */
 			execute_actions((*rule)->actions);
 			(*rule)->updated = 1;

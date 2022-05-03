@@ -1,8 +1,8 @@
 #include <stdio.h>
-
-void printHello();
+#include "other.h"
 
 int main() {
+	printf("First.");
 	printHello();	
 	return 0;
 }

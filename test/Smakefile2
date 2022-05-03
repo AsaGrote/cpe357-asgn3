@@ -1,13 +1,14 @@
-main : main.o other.o
+main : main.o other.o echo
 	gcc -o main main.o other.o
 	echo "Done!"
 
-main.o : main.c
-	gcc -c main.c
+echo :
+	echo "Echo"
+
+main.o : main.c other.h
+	gcc -c main.c other.h
 	echo "main built"
 
 other.o : other.c
 	gcc -c other.c
 	echo "other built"
-
-clean:
