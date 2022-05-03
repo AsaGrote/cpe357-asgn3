@@ -1,0 +1,11 @@
+all : mainfuncy.o funcy.o funcy.h
+	gcc -Wall -ansi -pedantic -o hellofuncy mainfuncy.o funcy.o
+
+mainfuncy.o : mainfuncy.c funcy.h
+	gcc -Wall -ansi -pedantic -c mainfuncy.c
+
+funcy.o : funcy.c
+	gcc -Wall -ansi -pedantic -c funcy.c
+
+clean :
+	rm *.o hellofuncy
