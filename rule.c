@@ -47,13 +47,16 @@ rule_list *get_rule(rule_list *head, char *target) {
 
 rule_list *parse_file(FILE *file) {
 	rule_list *head = NULL, *cur = NULL;
+	size_t line_size;
+	char *lineptr;
+
 	if (file == NULL) {
 		perror("Error: ");
 		exit(-1);
 	}
 
-	size_t line_size = sizeof(char) * DEFAULT_LINE_SIZE;
-	char *lineptr = malloc(line_size);
+	line_size = sizeof(char) * DEFAULT_LINE_SIZE;
+	lineptr = malloc(line_size);
 	if (lineptr == NULL) {
 		perror("Error: ");
 		exit(-1);
@@ -193,10 +196,11 @@ void apply_rule(rule_list **rule) {
 }
 
 void free_rule_list(rule_list *head) {
-    if (head == NULL) {
+    rule_list *next;
+	if (head == NULL) {
         return;
     }
-    rule_list *next = head->next; /* store head's next */
+    next = head->next; /* store head's next */
     if (head->depen != NULL) 
         free_nlist(head->depen);
     if (head->actions != NULL) 

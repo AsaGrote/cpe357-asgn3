@@ -34,6 +34,9 @@ int main(int argc, char **argv) {
         printf("Error. Invalid arguments for smake.");
         exit(-1);
     }
+
+	free_rule_list(rules);
+	rules = NULL;
 	
 	/* Close file before returning */
     fclose(fp);
