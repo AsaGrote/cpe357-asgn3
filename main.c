@@ -20,19 +20,26 @@ int main(int argc, char **argv) {
 
 	/* based on arguments provided, apply proper rule */
 	if (argc == 1) {
-	/*	apply_rule(rules); */
-	} else if (argc == 2) {
+		apply_rule(&rules);
+	} 
+	else if (argc == 2) {
 		arg = get_rule(rules, argv[1]);
 		if (arg == NULL) {
 			perror("Argument not found.");
 			exit(-1);
 		}
 
-	/*	apply_rule(arg);	*/
+	apply_rule(arg);
 	}
+	else {
+        printf("Error. Invalid arguments for smake.");
+        exit(-1);
+    }
 
 	/* test execute_action using echo rule */
 	execute_actions(rules->next->actions);
 
+	/* Close file before returning */
+    fclose(fp);
 	return 0;
 }

@@ -10,7 +10,10 @@ void free_nlist(nlist *head) {
         return;
     }
     temp = head->next; /* keep a pointer to the head's next */
-    free(head); 
+    if (head->data != NULL) { /* base case */
+        free(head->data); 
+    }
+    free(head);
     head = NULL;
     free_nlist(temp); /* recursively free list */
 }
