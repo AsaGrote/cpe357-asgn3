@@ -106,7 +106,6 @@ rule_list *parse_file(FILE *file) {
 	
 }
 
-
 void apply_rule(rule_list **rule) {
 	struct stat dep_stat; /* holds the struct stat for the dependency */
 	struct stat target_stat; /* holds the struct stat for the target */
@@ -209,4 +208,3 @@ void free_rule_list(rule_list *head) {
     head = NULL;
     free_rule_list(next);
 }
-

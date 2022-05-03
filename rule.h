@@ -15,4 +15,3 @@ rule_list *get_rule(rule_list *head, char *target);
 void print_rules(rule_list *rule);
 void apply_rule(rule_list **rule);
 void free_rule_list(rule_list *);
-
