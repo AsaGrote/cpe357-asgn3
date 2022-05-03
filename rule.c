@@ -36,58 +36,59 @@ rule_list *get_rule(rule_list *head, char *target) {
 }
 
 rule_list *parse_file(FILE *file) {
-	rule_list *cur = NULL, *head = NULL;
-	char *line = NULL;
-	char *target = NULL;
-	char *dep = NULL;
-
-	line = read_long_line(file);	
-	while (!feof(file)) {
-		if (strlen(line) > 0) {
-			/* if line starts with \t, it is an action */
-			if (line[0] == '\t') {
-				/* increment line to get rid of tab 
-				 * & add action to action list */
-				line++;
-				cur->actions = add_node(cur->actions, line);
-			/* otherwise, line is "target : dependencies" */
-			} else {
-				/* split line based on ':' 
-				 * target = target
-				 * line = dependencies */
-				target = strtok(line, ":");
-				dep = strtok(NULL, ":");
-				/* if line is made NULL, ':' was not found */	
-				if (line == NULL) {
-					perror("':' not found");
-					exit(-1);
-				}
-
-				/* create rule & add to list */
-				if (head == NULL) {
-					cur = new_rule(target);
-					head = cur; 
-				} else {
-					cur->next = new_rule(target);
-					cur = cur->next;
-				}
-				
-				/* split dependencies & add to dependency list */
-				line = dep;
-				if (line != NULL) {
-					while (line[0] == ' ') {
-						line++;
-					}
-					dep = strtok(line, " ");
-					while (dep != NULL) {
-						/* my way of ignoring white space */ 
-						cur->depen = add_node(cur->depen, dep);
-						dep = strtok(NULL, " ");
-					}
-				}
-			}
-		}
-		line = read_long_line(file);
+	rule_list *head = NULL, *cur = NULL;
+	if (file == NULL) {
+		perror("Error: ");
+		exit(-1);
 	}
 
-	return head;}
+	size_t line_size = sizeof(char) * DEFAULT_LINE_SIZE;
+	char *lineptr = malloc(line_size);
+	if (lineptr == NULL) {
+		perror("Error: ");
+		exit(-1);
+	}
+
+	while (getline(&lineptr, &line_size, file) != -1) { /* While end of file has not been reached */ 
+		if (lineptr[0] == '\t') { /* Action line */
+			if (cur == NULL) { /* If no rules have been declared, throw error */
+				printf("Error. No rule declared before actions.");
+				exit(-1);
+			}
+			add_node(&(cur->actions), strdup(lineptr)); /* Otherwise, add action to current rule_list action list */
+		}
+		else { /* Rule & dependency line */
+			const char s[] = " :\n";
+			char *token;
+			
+			/* get the first token */
+			token = strtok(lineptr, s);
+			if (token == NULL) {
+				continue;
+			}
+
+			/* First token is the rule */
+			if (head == NULL) { /* If first rule, head = new rule with the current target name */
+				head = (rule_list *) new_rule(strdup(token)); /* IS THIS CAST NECESSARY? */
+				cur = head;
+			}
+			else { /* Else if not first rule, create new rule, set current->next to the new rule, then set current to the new rule */
+				rule_list *new = (rule_list *) new_rule(strdup(token)); /* IS THIS CAST NECESSARY? */ /* Make a new rule with the target name. */ 
+				cur->next = new;
+				cur = new;
+				new = NULL;
+			}
+
+			/* Populate current dependency list */ 
+
+			while ( (token = strtok(NULL, s)) != NULL) {
+			/* while (token != NULL) {
+				token = strtok(NULL, s); */
+				add_node(&(cur->depen), strdup(token));
+			}
+		}
+	}
+
+	return head;
+	
+}
