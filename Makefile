@@ -7,7 +7,7 @@ all: $(MAIN)
 $(MAIN): $(OBJ)
 	$(CC) $(CLFAGS) -g -o $(MAIN) $(OBJ)
 
-main.o: main.c main.h rule.h list.h
+main.o: main.c rule.h list.h
 	$(CC) $(CFLAGS) -g -c main.c
 
 rule.o: rule.c rule.h

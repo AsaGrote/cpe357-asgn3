@@ -12,4 +12,4 @@ INSTRUCTIONS:
 
 
 OTHER NOTES:
-	Using std=gnu99 so that we can use strsep.
+	Using std=gnu99 so that we can use strdup.
