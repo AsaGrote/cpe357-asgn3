@@ -11,3 +11,4 @@ other.o : other.c
 	echo "other built"
 
 clean:
+	rm *.o main 
