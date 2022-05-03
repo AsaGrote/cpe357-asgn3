@@ -1,0 +1,15 @@
+# cpe357-asgn3
+Names: Asa Grote (agrote) & Jack Rhines (jrhines)
+
+GOAL:
+Create smake, a simplified version of the popular make utility
+
+
+INSTRUCTIONS:
+	To create our smake file, just call make.
+	To execute smake, just call ./smake with 0 or 1 additional arguments.
+	Requires a Smakefile.
+
+
+OTHER NOTES:
+	Using std=gnu99 so that we can use strsep.

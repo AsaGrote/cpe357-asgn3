@@ -12,6 +12,7 @@
 rule_list *new_rule(char *target) {
 	rule_list *rule = (rule_list *)malloc(sizeof(rule_list));
 	if (rule == NULL) {
+		free_rule_list(rule);
 		perror("Error: ");
 		exit(-1);
 	}
@@ -94,7 +95,6 @@ rule_list *parse_file(FILE *file) {
 			}
 		}
 	}
-
     free(lineptr);
 	return head;
 	
@@ -104,25 +104,28 @@ void apply_rule(rule_list **rule) {
 	struct stat dep_stat; /* holds the struct stat for the dependency */
 	struct stat target_stat; /* holds the struct stat for the target */
 	int target_file_exists = stat((*rule)->target, &target_stat);
+	nlist *cur_dep = NULL;
+	rule_list *cur_rule = NULL, *target = NULL;
 
 	if (*rule == NULL) {
-		/* TODO: THIS IS AN ERROR RIGHT? */
 		printf("Error. No rule to apply.");
 		exit(-1);
 	}
-	if ((*rule)->depen == NULL && (*rule)->actions != NULL ) { /* if no dependencies */
-		/* execute the rule's actions, set the rule to updated, then return */
-		execute_actions((*rule)->actions);
-		(*rule)->updated = 1;
-		return; /* Rule has been executed; return */
+	if ((*rule)->depen == NULL){
+		if ((*rule)->actions != NULL ) { /* if no dependencies */
+			/* execute the rule's actions, set the rule to updated, then return */
+			execute_actions((*rule)->actions);
+			(*rule)->updated = 1;
+			return; /* Rule has been executed; return */
+		}
 	}
 	else { /* validate & determine the type of each dependency */
 		/* For each dependency */
-		nlist *cur_dep = (*rule)->depen;
+		cur_dep = (*rule)->depen;
 		while (cur_dep != NULL) {
 			/* First, check if the dependency is a target of another rule. */
-			rule_list *cur_rule = (*rule);
-			rule_list *target = NULL; 
+			cur_rule = (*rule);
+			target = NULL; 
 			while (cur_rule != NULL) {
 				if (strcmp(cur_rule->target, cur_dep->data) == 0) {
 					target = cur_rule;

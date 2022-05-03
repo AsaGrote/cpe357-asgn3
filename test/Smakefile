@@ -10,5 +10,7 @@ other.o : other.c
 	gcc -c other.c
 	echo "other built"
 
-clean:
+clean :
 	rm *.o main 
+
+dne :

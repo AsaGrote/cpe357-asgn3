@@ -13,7 +13,6 @@ int main(int argc, char **argv) {
 		printf("Smakefile not found.");
 		exit(-1);
 	} 
-	printf("Makefile opened!\n");
     /* Parse the file for rules, dependancies, and actions */
 	rules = parse_file(fp);	    
 	
