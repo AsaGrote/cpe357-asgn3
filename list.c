@@ -75,6 +75,7 @@ nlist *get_node(nlist *head, char *data) {
 
 void execute_actions(nlist *actions) {
 	while (actions != NULL) {
+		printf("%s", ((actions->data) + 1));
 		system(actions->data);
 		actions = actions->next;
 	}
