@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     /* open the makefile based on command line arguments */
     fp = fopen("Smakefile", "r");
 	if (fp == NULL) {
-		printf("Smakefile not found.");
+		printf("smake: Smakefile: No such file or directory\n");
 		exit(-1);
 	} 
     /* Parse the file for rules, dependancies, and actions */
@@ -18,20 +18,20 @@ int main(int argc, char **argv) {
 	
 	/* based on arguments provided, apply proper rule */
 	if (argc == 1) {
-		apply_rule(&rules);
+		apply_rule(&rules, &rules);
 	}
  
 	else if (argc == 2) {
 		arg = get_rule(rules, argv[1]);
 		if (arg == NULL) {
-			printf("Argument not found.");
+			printf("Argument not found.\n");
 			exit(-1);
 		}
 
-		apply_rule(&arg);
+		apply_rule(&arg, &arg);
 	}
 	else {
-        printf("Error. Invalid arguments for smake.");
+        printf("Error. Invalid arguments for smake.\n");
         exit(-1);
     }
 

@@ -51,14 +51,14 @@ rule_list *parse_file(FILE *file) {
 	char *lineptr;
 
 	if (file == NULL) {
-		perror("Error: ");
+		perror("null file pointer");
 		exit(-1);
 	}
 
 	line_size = sizeof(char) * DEFAULT_LINE_SIZE;
 	lineptr = malloc(line_size);
 	if (lineptr == NULL) {
-		perror("Error: ");
+		perror("malloc");
 		exit(-1);
 	}
 
@@ -71,6 +71,9 @@ rule_list *parse_file(FILE *file) {
 			add_node(&(cur->actions), strdup(lineptr)); /* Otherwise, add action to current rule_list action list */
 		}
 		else { /* Rule & dependency line */
+			if(!is_whitespace(lineptr) && strchr(lineptr, ':') == NULL) {
+				printf("Smakefile: *** missing separator.  Stop.");
+			}
 			const char s[] = " :\n";
 			char *token;
 			
@@ -103,7 +106,7 @@ rule_list *parse_file(FILE *file) {
 	
 }
 
-void apply_rule(rule_list **rule) {
+void apply_rule(rule_list **rule, rule_list **first_rule) {
 	struct stat dep_stat; /* holds the struct stat for the dependency */
 	struct stat target_stat; /* holds the struct stat for the target */
 	int target_file_exists = stat((*rule)->target, &target_stat);
@@ -127,7 +130,7 @@ void apply_rule(rule_list **rule) {
 		cur_dep = (*rule)->depen;
 		while (cur_dep != NULL) {
 			/* First, check if the dependency is a target of another rule. */
-			cur_rule = (*rule);
+			cur_rule = (*first_rule);
 			target = NULL; 
 			while (cur_rule != NULL) {
 				if (strcmp(cur_rule->target, cur_dep->data) == 0) {
@@ -142,7 +145,7 @@ void apply_rule(rule_list **rule) {
 			if (target == NULL) {
 				if (stat(cur_dep->data, &dep_stat) == -1) {
 					/* current dependency is NOT a file, report an error */
-					printf("make: error. No rule to make target. Stop.");
+					printf("smake: error. No rule to make target. Stop.");
 					exit(-1);
 				}
 				else { /* current dependency IS a file */ 
@@ -163,7 +166,7 @@ void apply_rule(rule_list **rule) {
 			}
 			else { /* else, dependency is a target of another rule
 				* recursively apply this rule */
-				apply_rule(&target);
+				apply_rule(&target, first_rule);
 
 				/* check if applied rule was updated 
 				 * if so, the current rule should also be set to updated */
@@ -210,4 +213,16 @@ void free_rule_list(rule_list *head) {
     free(head);
     head = NULL;
     free_rule_list(next);
+}
+
+int is_whitespace(char *str) {
+	int i;
+	char c;
+	for (i = 0; i < strlen(str); i++) {
+		c = str[i];
+		if (c != ' ' && c != '\t' && c != '\n') {
+			return 0;
+		}
+	}
+	return 1;
 }

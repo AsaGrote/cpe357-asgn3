@@ -19,8 +19,6 @@ struct nlist *create_node(char *);
 
 /* Adds a node to the linked list. */
 /* Accepts two arguments. The first is the head of the list. The second is the data to add */
-/*                                         ^        */
-/*                                         tail???? <- could be a better & faster option. However, we would have to keep track of the tail*/
 void add_node(struct nlist **, char *);
 
 /* Searches the a list for a value */
